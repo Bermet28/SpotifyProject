@@ -20,6 +20,9 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/category/', include('category.urls')),
-    path('api/v1/music/', include('music.urls'))
+    path('api/v1/musics/', include('music.urls')),
+    path('api/v1/accounts/', include('account.urls')),
+    path('api/v1/comments_likes/', include('comments_likes.urls')),
+    # path('media/images', include('music.urls'))
 
 ]

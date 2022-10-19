@@ -11,6 +11,7 @@ class Music(models.Model):
     image = models.ImageField(upload_to='images')
     track = models.FileField(upload_to='mp3')
     created_at = models.DateTimeField(auto_now_add=True)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='music', null=True)
 
     def __str__(self):
         return self.name

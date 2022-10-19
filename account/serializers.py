@@ -1,3 +1,5 @@
+from abc import ABC
+
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
@@ -19,6 +21,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         password2 = attrs.pop('password2')
+        print(attrs)
         if attrs['password'] != password2:
             raise serializers.ValidationError('Password did not match')
         if not attrs['password'].isalnum():

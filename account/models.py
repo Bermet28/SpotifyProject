@@ -4,8 +4,6 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 
 
-
-
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
@@ -60,3 +58,4 @@ class CustomUser(AbstractUser):
         import uuid
         code = str(uuid.uuid4())
         self.activation_code = code
+
