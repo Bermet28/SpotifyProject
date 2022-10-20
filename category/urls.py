@@ -4,9 +4,9 @@ from rest_framework.routers import DefaultRouter
 from category.views import CategoryViewSet
 
 
-router = DefaultRouter
+router = DefaultRouter()
 router.register('categories', CategoryViewSet)
 
 urlpatterns = [
-    path('api/', include(router.urls)),
+    path('', include(router.urls)),
 ]
