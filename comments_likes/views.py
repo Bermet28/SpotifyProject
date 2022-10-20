@@ -44,9 +44,9 @@ class LikeCreateView(generics.CreateAPIView):
     permission_classes = (permissions, IsAuthenticated,)
     serializer_class = serializers.LikeSerializer
 
-    def __init__(self, **kwargs):
-        super().__init__(kwargs)
-        self.action = None
+    # def __init__(self, **kwargs):
+    #     super().__init__(kwargs)
+    #     self.action = None
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)

@@ -8,6 +8,7 @@ User = get_user_model()
 
 
 class Comment(models.Model):
+    id = models.CharField(max_length=20, primary_key=True)
     owner = models.ForeignKey(CustomUser, related_name='comments', on_delete=models.CASCADE)
     music = models.ForeignKey(Music, related_name='comments', on_delete=models.CASCADE)
     body = models.TextField()

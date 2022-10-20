@@ -9,8 +9,8 @@ from comments_likes.models import Like, Favorites
 from comments_likes.serializers import CommentSerializer, LikeSerializer
 from . import serializers
 from account import permissions as per
-from music.models import Music
-from music.serializers import MusicSerializer
+from music.models import Music, Album
+from music.serializers import MusicSerializer, AlbumSerializer
 
 
 class StandartResultPagination(PageNumberPagination):
@@ -19,7 +19,7 @@ class StandartResultPagination(PageNumberPagination):
     max_page_size = 1000
 
 
-class MusicViewSet(generics.ListCreateAPIView):
+class MusicView(generics.ListCreateAPIView):
     queryset = Music.objects.all()
     filter_backends = (DjangoFilterBackend, SearchFilter)
     filterset_fields = ('category',)
@@ -31,6 +31,11 @@ class MusicViewSet(generics.ListCreateAPIView):
     #     if self.action == 'list':
     #         return serializers.MusicListSerializer
     #     return serializers.MusicDetailSerializer
+
+
+class AlbumViewSet(viewsets.ModelViewSet):
+    queryset = Album.objects.all()
+    serializer_class = AlbumSerializer
 
 
 
