@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from .yasg import urlpatterns as doc_urls
 
 
 urlpatterns = [
@@ -22,8 +23,10 @@ urlpatterns = [
     path('api/v1/category/', include('category.urls')),
     path('api/v1/musics/', include('music.urls')),
     path('api/v1/accounts/', include('account.urls')),
-    path('api/v1/comments_likes/', include('comments_likes.urls')),
+    path('api/v1/comments_favorites/', include('comments_favorites.urls')),
 
     # path('media/images', include('music.urls'))
 
 ]
+
+urlpatterns += doc_urls

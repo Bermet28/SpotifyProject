@@ -39,3 +39,14 @@ class Album(models.Model):
 
     def __str__(self):
         return f'{self.name} ->{self.music}'
+
+
+class Like(models.Model):
+    music = models.ForeignKey(Music, on_delete=models.CASCADE, related_name='likes')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='liked')
+
+    class Meta:
+        unique_together = ['music', 'owner']
+
+    def __str__(self):
+        return f'{self.music} -> {self.owner}'

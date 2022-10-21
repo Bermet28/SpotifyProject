@@ -4,13 +4,15 @@ from rest_framework import viewsets, generics, permissions, response
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import PageNumberPagination
-
-from comments_likes.models import Like, Favorites
-from comments_likes.serializers import CommentSerializer, LikeSerializer
+from rest_framework.response import Response
+import music
+from account.permissions import IsAuthor
+from comments_favorites.models import Favorites
+from comments_favorites.serializers import CommentSerializer
 from . import serializers
 from account import permissions as per
-from music.models import Music, Album
-from music.serializers import MusicSerializer, AlbumSerializer
+from music.models import Music, Album, Like
+from music.serializers import MusicSerializer, AlbumSerializer, LikeSerializer
 
 
 class StandartResultPagination(PageNumberPagination):
@@ -19,7 +21,7 @@ class StandartResultPagination(PageNumberPagination):
     max_page_size = 1000
 
 
-class MusicView(generics.ListCreateAPIView):
+class MusicViewSet(viewsets.ModelViewSet):
     queryset = Music.objects.all()
     filter_backends = (DjangoFilterBackend, SearchFilter)
     filterset_fields = ('category',)
@@ -29,8 +31,46 @@ class MusicView(generics.ListCreateAPIView):
 
     # def get_serializer_class(self):
     #     if self.action == 'list':
-    #         return serializers.MusicListSerializer
+    #         return serializers.MusicListListSerializer
     #     return serializers.MusicDetailSerializer
+
+    def get_permissions(self):
+        if self.action in ('update', 'partial_update', 'destroy'):
+            return [permissions.IsAuthenticated(), IsAuthor()]
+        elif self.action in ('create', 'add_to_liked', 'remove_from_liked', 'favorite_action'):
+            return [permissions.IsAuthenticated()]
+        else:
+            return [permissions.IsAuthenticatedOrReadOnly()]
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+
+    @action(['POST'], detail=True)
+    def add_to_liked(self, request, pk):
+        music = self.get_object()
+        user = request.user
+        if user.liked.filter(music=music).exists():
+            return Response('This Movie is Already Liked!', status=400)
+        Like.objects.create(owner=user, music=music,)
+        return Response('You Liked The Music', status=201)
+
+    # /posts/<id>?remove_from_liked/
+    @action(['DELETE'], detail=True)
+    def remove_from_liked(self, request, pk):
+        music = self.get_object()
+        user = request.user
+        if not user.liked.filter(music=music).exists():
+            return Response('You Didn\'t Like This Music!', status=400)
+        user.liked.filter(music=music).delete()
+        return Response('Your Like is Deleted!', status=204)
+
+    @action(['GET'], detail=True)
+    def get_likes(self, request, pk):
+        music = self.get_object()
+        likes = music.likes.all()
+        serializer = serializers.LikeSerializer(likes, many=True)
+        return Response(serializer.data)
 
 
 class AlbumViewSet(viewsets.ModelViewSet):
