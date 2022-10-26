@@ -3,6 +3,7 @@ from mutagen.mp3 import MP3
 from category.models import Category
 from django.contrib.auth import get_user_model
 from music.helpers import get_audio_length
+from music.validators import validate_is_audio
 
 User = get_user_model()
 
@@ -11,7 +12,7 @@ class Music(models.Model):
     name = models.CharField(max_length=100)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='music')
     image = models.ImageField(upload_to='images')
-    track = models.FileField(upload_to='mp3')
+    track = models.FileField(upload_to='mp3', validators=[validate_is_audio])
     created_at = models.DateTimeField(auto_now_add=True)
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='music', null=True)
     # album = models.ForeignKey(Album, on_delete=models.SET_NULL, blank=True, null=True)
