@@ -30,36 +30,6 @@ class CommentDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsAuthor)
 
 
-# class FavoritesView(views.APIView):
-#     permission_classes = (IsAccountOwner,)
-#
-#     def get(self, request):
-#         user = request.user
-#         favorites = user.favorites.all()
-#         serializer = FavoritesSerializer(favorites, many=True)
-#         return Response(serializer.data)
-#
-#     def get_permissions(self):
-#         if self.request.method == 'GET':
-#             return [permissions.AllowAny()]
-#         return [permissions.IsAuthenticated(), IsAuthor()]
-#
-#
-# @api_view(["POST"])
-# def add_favorites(request):
-#     serializer = FavoritesSerializer(data=request.POST)
-#     if serializer.is_valid(raise_exception=True):
-#         serializer.save()
-#         return Response("Добавлено в избранные")
-#
-#
-# @api_view(["DELETE"])
-# def delete_favorites(request, c_id):
-#     comment = get_object_or_404(Comment, id=c_id)
-#     comment.delete()
-#     return Response("Удалено из избранных")
-
-
 class FavoritesListCreateView(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = serializers.CommentSerializer
@@ -73,6 +43,35 @@ class FavoritesDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = serializers.CommentSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsAuthor)
+
+    # class FavoritesView(views.APIView):
+    #     permission_classes = (IsAccountOwner,)
+    #
+    #     def get(self, request):
+    #         user = request.user
+    #         favorites = user.favorites.all()
+    #         serializer = FavoritesSerializer(favorites, many=True)
+    #         return Response(serializer.data)
+    #
+    #     def get_permissions(self):
+    #         if self.request.method == 'GET':
+    #             return [permissions.AllowAny()]
+    #         return [permissions.IsAuthenticated(), IsAuthor()]
+    #
+    #
+    # @api_view(["POST"])
+    # def add_favorites(request):
+    #     serializer = FavoritesSerializer(data=request.POST)
+    #     if serializer.is_valid(raise_exception=True):
+    #         serializer.save()
+    #         return Response("Добавлено в избранные")
+    #
+    #
+    # @api_view(["DELETE"])
+    # def delete_favorites(request, c_id):
+    #     comment = get_object_or_404(Comment, id=c_id)
+    #     comment.delete()
+    #     return Response("Удалено из избранных")
 
 #
 
